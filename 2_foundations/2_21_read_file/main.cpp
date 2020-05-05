@@ -17,6 +17,15 @@ void display_grid(vector<vector<int>> grid) {
     }
 }
 
+vector<int> parse_line(istringstream &line_stream) {
+    vector<int> vector_line = {};
+    string cell;
+    while (getline(line_stream, cell, ',')) {
+        vector_line.push_back(stoi(cell));
+    }
+    return vector_line;
+}
+
 vector<vector<int>> read_board_file(string filename) {
     vector<vector<int>> grid;
     ifstream infile(filename);
@@ -28,13 +37,7 @@ vector<vector<int>> read_board_file(string filename) {
     string line;
     while (getline(infile, line)) {
         istringstream iss(line);
-        string cell;
-        vector<int> vector_line = {};
-        while (std::getline(iss, cell, ',')) {
-            vector_line.push_back(stoi(cell));
-        }
-
-        grid.push_back(vector_line);
+        grid.push_back(parse_line(iss));
     }
     return grid;
 }
