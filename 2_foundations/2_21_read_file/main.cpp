@@ -7,11 +7,29 @@
 
 using namespace std;
 
-void display_grid(vector<vector<int>> grid) {
+enum State { kClear, kObstacle };
 
+string cell_string(State cell) {
+    switch (cell) {
+    case State::kObstacle:
+        return "⛰️ ";
+    default:
+        return "0 ";
+    }
+}
+
+State int_to_State(int value) {
+    if (value == 0) {
+        return State::kClear;
+    } else {
+        return State::kObstacle;
+    }
+}
+
+void display_grid(vector<vector<int>> grid) {
     for (vector<int> row : grid) {
         for (int cell : row) {
-            cout << cell;
+            cout << cell_string(int_to_State(cell));
         }
         cout << "\n";
     }
