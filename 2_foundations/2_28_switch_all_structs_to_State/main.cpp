@@ -7,7 +7,7 @@
 
 using namespace std;
 
-enum State { kClear, kObstacle };
+enum class State { kClear, kObstacle };
 
 string cell_string(State cell) {
     switch (cell) {
