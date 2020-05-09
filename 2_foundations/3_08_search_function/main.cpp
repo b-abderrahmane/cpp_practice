@@ -15,7 +15,7 @@ string cell_string(State cell) {
     case State::kObstacle:
         return "⛰️ ";
     default:
-        return "0 ";
+        return "0  ";
     }
 }
 
@@ -80,14 +80,18 @@ bool compare_nodes(vector<int> a, vector<int> b) {
 }
 
 void cell_sort(vector<vector<int>> *v) {
-  sort(v->begin(), v->end(), compare_nodes);
+    sort(v->begin(), v->end(), compare_nodes);
 }
 
 bool CheckValidCell(int x, int y, vector<vector<State>> &grid) {
-    if (x >= 0 && y >= 0 && ) {
-        
+    if (x >= 0 && y >= 0) {
+        if (x < grid.size() and y < grid[0].size()) {
+            if (grid[x][y] != State::kObstacle && grid[x][y] != State::kClosed) {
+                return true;
+            }
+        }
     }
-
+    return false;
 }
 
 vector<vector<State>> search(vector<vector<State>> grid, int indices[2][2]) {
