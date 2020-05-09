@@ -117,13 +117,20 @@ vector<vector<State>> search(vector<vector<State>> grid, int indices[2][2]) {
     return results;
 }
 
-vector<int[2]> get_all_neighbors(int x, int y) {
-    vector<int[2]> neighbors = {};
+vector<vector<int>> get_all_neighbors(int x, int y) {
+    vector<vector<int>> neighbors = {};
     const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
     for (int i = 0; i < 4; i++) {
         neighbors.push_back({x + delta[i][0], y + delta[i][1]});
     }
     return neighbors;
+}
+
+void expand_neighbors(int current_node[2], vector<vector<State>> &grid,
+                      vector<vector<int>> &open_nodes, int goal[2]) {
+    State current_state = grid[current_node[0]][current_node[1]];
+    vector<vector<int>> neighbors = get_all_neighbors(current_node[0], current_node[1]);
+
 }
 
 int main() {
