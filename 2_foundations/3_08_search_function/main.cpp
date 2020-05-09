@@ -85,8 +85,8 @@ void cell_sort(vector<vector<int>> *v) {
 
 bool CheckValidCell(int x, int y, vector<vector<State>> &grid) {
     if (x >= 0 && y >= 0) {
-        if (x < grid.size() and y < grid[0].size()) {
-            if (grid[x][y] != State::kObstacle && grid[x][y] != State::kClosed) {
+        if (x < grid.size() && y < grid[0].size()) {
+            if (grid[x][y] == State::kClear) {
                 return true;
             }
         }
