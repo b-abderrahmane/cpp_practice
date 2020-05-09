@@ -117,6 +117,15 @@ vector<vector<State>> search(vector<vector<State>> grid, int indices[2][2]) {
     return results;
 }
 
+vector<int[2]> get_all_neighbors(int x, int y) {
+    vector<int[2]> neighbors = {};
+    const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+    for (int i = 0; i < 4; i++) {
+        neighbors.push_back({x + delta[i][0], y + delta[i][1]});
+    }
+    return neighbors;
+}
+
 int main() {
     vector<vector<State>> grid;
 
