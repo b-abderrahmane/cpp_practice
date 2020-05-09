@@ -113,7 +113,6 @@ vector<vector<State>> search(vector<vector<State>> grid, int indices[2][2]) {
         return grid;
     }
 
-    cout << "No path found!" << endl;
     return results;
 }
 
