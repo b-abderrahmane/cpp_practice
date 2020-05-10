@@ -67,19 +67,14 @@ int manhattan_heuristic(int start[2], int destination[2]) {
     return abs(start[0] - destination[0]) + abs(start[1] - destination[1]);
 }
 
-void add_to_open(vector<vector<State>> &grid, vector<vector<int>> &open_nodes,
-                 int x, int y, int g, int h) {
+void add_to_open(vector<vector<State>> &grid, vector<vector<int>> &open_nodes, int x, int y, int g, int h) {
     open_nodes.push_back(vector<int>{x, y, g, h});
     grid[x][y] = State::kClosed;
 }
 
-bool compare_nodes(vector<int> a, vector<int> b) {
-    return a[2] + a[3] > b[2] + b[3];
-}
+bool compare_nodes(vector<int> a, vector<int> b) { return a[2] + a[3] > b[2] + b[3]; }
 
-void cell_sort(vector<vector<int>> *v) {
-    sort(v->begin(), v->end(), compare_nodes);
-}
+void cell_sort(vector<vector<int>> *v) { sort(v->begin(), v->end(), compare_nodes); }
 
 bool CheckValidCell(int x, int y, vector<vector<State>> &grid) {
     if (x >= 0 && y >= 0) {
@@ -92,8 +87,8 @@ bool CheckValidCell(int x, int y, vector<vector<State>> &grid) {
     return false;
 }
 
-void expand_neighbors(vector<int> current_node, vector<vector<State>> &grid,
-                      vector<vector<int>> &open_nodes, int goal[2]) {
+void expand_neighbors(vector<int> current_node, vector<vector<State>> &grid, vector<vector<int>> &open_nodes,
+                      int goal[2]) {
     int node_coor[2] = {current_node[0], current_node[1]};
     int g = current_node[2];
     int h = current_node[3];
@@ -115,8 +110,7 @@ void expand_neighbors(vector<int> current_node, vector<vector<State>> &grid,
 vector<vector<State>> search(vector<vector<State>> grid, int start[2], int goal[2]) {
 
     vector<vector<int>> open_nodes{};
-    add_to_open(grid, open_nodes, start[0], start[1], 0,
-                manhattan_heuristic(start, goal));
+    add_to_open(grid, open_nodes, start[0], start[1], 0, manhattan_heuristic(start, goal));
 
     while (open_nodes.size() > 0) {
         cell_sort(&open_nodes);
@@ -131,7 +125,8 @@ vector<vector<State>> search(vector<vector<State>> grid, int start[2], int goal[
         expand_neighbors(current, grid, open_nodes, goal);
     }
 
-    cout << "No path found!" << "\n";
+    cout << "No path found!"
+         << "\n";
     return std::vector<vector<State>>{};
 }
 
