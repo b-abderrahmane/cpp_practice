@@ -8,7 +8,7 @@
 
 using namespace std;
 
-enum class State { kClear, kObstacle, kClosed, kPath };
+enum class State { kClear, kObstacle, kClosed, kPath, kStart, kFinish };
 
 string cell_string(State cell) {
     switch (cell) {
@@ -16,6 +16,10 @@ string cell_string(State cell) {
         return "⛰️ ";
     case State::kPath:
         return "🚗 ";
+    case State::kStart:
+        return "🚦 ";
+    case State::kFinish:
+        return "🏁 ";
     default:
         return "0  ";
     }
@@ -107,6 +111,8 @@ void expand_neighbors(vector<int> current_node, vector<vector<State>> &grid, vec
     }
 }
 
+void add_marker(vector<vector<State>> &grid, int location[2], State state) { grid[location[0]][location[1]] = state; }
+
 vector<vector<State>> search(vector<vector<State>> grid, int start[2], int goal[2]) {
 
     vector<vector<int>> open_nodes{};
@@ -120,6 +126,8 @@ vector<vector<State>> search(vector<vector<State>> grid, int start[2], int goal[
         int y = current[1];
         grid[x][y] = State::kPath;
         if (x == goal[0] && y == goal[1]) {
+            add_marker(grid, start, State::kStart);
+            add_marker(grid, goal, State::kFinish);
             return grid;
         }
         expand_neighbors(current, grid, open_nodes, goal);
