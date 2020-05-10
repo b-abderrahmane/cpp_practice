@@ -74,10 +74,7 @@ void add_to_open(vector<vector<State>> &grid, vector<vector<int>> &open_nodes,
 }
 
 bool compare_nodes(vector<int> a, vector<int> b) {
-    if (a[2] + a[3] > b[2] + b[3]) {
-        return true;
-    }
-    return false;
+    return a[2] + a[3] > b[2] + b[3];
 }
 
 void cell_sort(vector<vector<int>> *v) {
