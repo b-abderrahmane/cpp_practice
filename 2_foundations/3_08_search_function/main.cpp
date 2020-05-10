@@ -14,6 +14,8 @@ string cell_string(State cell) {
     switch (cell) {
     case State::kObstacle:
         return "⛰️ ";
+    case State::kPath:
+        return "🚗 ";
     default:
         return "0  ";
     }
@@ -67,8 +69,7 @@ int manhattan_heuristic(int start[2], int destination[2]) {
 
 void add_to_open(vector<vector<State>> &grid, vector<vector<int>> &open_nodes,
                  int x, int y, int g, int h) {
-    vector<int> node = {x, y, g, h};
-    open_nodes.push_back(node);
+    open_nodes.push_back(vector<int>{x, y, g, h});
     grid[x][y] = State::kClosed;
 }
 
@@ -94,50 +95,54 @@ bool CheckValidCell(int x, int y, vector<vector<State>> &grid) {
     return false;
 }
 
+void expand_neighbors(vector<int> current_node, vector<vector<State>> &grid,
+                      vector<vector<int>> &open_nodes, int goal[2]) {
+    int node_coor[2] = {current_node[0], current_node[1]};
+    int g = current_node[2];
+    int h = current_node[3];
+
+    const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+    vector<int> neighbor = {};
+    int next_y, next_x;
+    for (int i = 0; i < 4; i++) {
+        int next_x = node_coor[0] + delta[i][0];
+        int next_y = node_coor[1] + delta[i][1];
+        int new_coor[2] = {next_x, next_y};
+        if (CheckValidCell(next_x, next_y, grid)) {
+            int heur = manhattan_heuristic(new_coor, goal);
+            add_to_open(grid, open_nodes, next_x, next_y, g + 1, heur);
+        }
+    }
+}
+
 vector<vector<State>> search(vector<vector<State>> grid, int indices[2][2]) {
-    vector<vector<State>> results;
-    vector<vector<int>> open_nodes;
+
+    vector<vector<int>> open_nodes{};
     add_to_open(grid, open_nodes, indices[0][0], indices[0][1], 0,
                 manhattan_heuristic(indices[0], indices[1]));
 
-    int i = 0;
-    while (!open_nodes.empty()) {
+    while (open_nodes.size() > 0) {
         cell_sort(&open_nodes);
-
-        int x = open_nodes[i][2];
-        int y = open_nodes[i][3];
+        auto current = open_nodes.back();
+        open_nodes.pop_back();
+        int x = current[0];
+        int y = current[1];
         grid[x][y] = State::kPath;
         if (x == indices[1][0] && y == indices[1][1]) {
             return grid;
         }
-        return grid;
+        expand_neighbors(current, grid, open_nodes, indices[1]);
     }
 
-    return results;
-}
-
-vector<vector<int>> get_all_neighbors(int x, int y) {
-    vector<vector<int>> neighbors = {};
-    const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
-    for (int i = 0; i < 4; i++) {
-        neighbors.push_back({x + delta[i][0], y + delta[i][1]});
-    }
-    return neighbors;
-}
-
-void expand_neighbors(int current_node[2], vector<vector<State>> &grid,
-                      vector<vector<int>> &open_nodes, int goal[2]) {
-    State current_state = grid[current_node[0]][current_node[1]];
-    vector<vector<int>> neighbors = get_all_neighbors(current_node[0], current_node[1]);
-
+    cout << "No path found!" << "\n";
+    return std::vector<vector<State>>{};
 }
 
 int main() {
     vector<vector<State>> grid;
 
     grid = read_board_file("1.board");
-    int indices[2][2] = {{0, 0}, {4, 5}};
-    cout << manhattan_heuristic(indices[0], indices[1]) << endl;
+    int indices[2][2] = {{0, 0}, {0, 5}};
     grid = search(grid, indices);
     display_grid(grid);
 }
