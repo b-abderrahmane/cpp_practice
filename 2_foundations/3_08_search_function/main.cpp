@@ -115,11 +115,11 @@ void expand_neighbors(vector<int> current_node, vector<vector<State>> &grid,
     }
 }
 
-vector<vector<State>> search(vector<vector<State>> grid, int indices[2][2]) {
+vector<vector<State>> search(vector<vector<State>> grid, int start[2], int goal[2]) {
 
     vector<vector<int>> open_nodes{};
-    add_to_open(grid, open_nodes, indices[0][0], indices[0][1], 0,
-                manhattan_heuristic(indices[0], indices[1]));
+    add_to_open(grid, open_nodes, start[0], start[1], 0,
+                manhattan_heuristic(start, goal));
 
     while (open_nodes.size() > 0) {
         cell_sort(&open_nodes);
@@ -128,10 +128,10 @@ vector<vector<State>> search(vector<vector<State>> grid, int indices[2][2]) {
         int x = current[0];
         int y = current[1];
         grid[x][y] = State::kPath;
-        if (x == indices[1][0] && y == indices[1][1]) {
+        if (x == goal[0] && y == goal[1]) {
             return grid;
         }
-        expand_neighbors(current, grid, open_nodes, indices[1]);
+        expand_neighbors(current, grid, open_nodes, goal);
     }
 
     cout << "No path found!" << "\n";
@@ -142,7 +142,8 @@ int main() {
     vector<vector<State>> grid;
 
     grid = read_board_file("1.board");
-    int indices[2][2] = {{0, 0}, {0, 5}};
-    grid = search(grid, indices);
+    int start[2] = {0, 0};
+    int goal[2] = {0, 5};
+    grid = search(grid, start, goal);
     display_grid(grid);
 }
